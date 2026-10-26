@@ -2,5 +2,10 @@
 @media(max-width:780px){.http-layout{grid-template-columns:1fr}.http-nav{position:static}.http-nav .nav-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px}.analogy-grid,.steps,.method-grid{grid-template-columns:1fr}.http-main{padding:20px}.http-site-header{padding:12px;gap:8px;flex-wrap:wrap;height:auto}.http-site-header .page-label{display:none}.http-content table{display:block;overflow-x:auto}}
 @media print{body{background:white!important;color:#17263a!important}.http-hero{background:#13264d!important;print-color-adjust:exact}.http-nav,.progress-card,.http-content button,.http-footer,.http-site-header{display:none!important}.http-layout{display:block}.http-content section{box-shadow:none;break-inside:avoid}}
 
-/* Keep lesson pages consistent with the shared dashboard theme. */
-.http-page{background:var(--bg);color:var(--text)}.http-site-header .theme-button{flex:0 0 auto}
+/* Match the dashboard's existing dark theme. Lessons have no separate theme toggle. */
+body.http-page{--bg:#091424;--panel:#11243a;--card:#172c46;--line:#2c435d;--muted:#9bb0c9;--accent:#5ba8ff;--text:#e8eefc;background:var(--bg);color:var(--text)}
+body.http-page .site-header{background:var(--panel);color:var(--text)}
+body.http-page .http-content section,body.http-page .http-nav,body.http-page .progress-card{background:var(--panel);color:var(--text);border-color:var(--line)}
+body.http-page .tile,body.http-page .method,body.http-page .http-content .callout,body.http-page .http-nav a:hover,body.http-page .http-nav a.active{background:var(--card);color:var(--text)}
+body.http-page .http-nav a{color:var(--muted)}
+body.http-page .http-nav a:hover,body.http-page .http-nav a.active{color:var(--accent)}
