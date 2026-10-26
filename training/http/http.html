@@ -12,6 +12,7 @@
 <header class="site-header http-site-header">
   <a class="brand" href="../../index.html">◈ My Training Encyclopedia</a>
   <span class="page-label">HTTP Fundamentals · Beginner</span>
+  <button id="theme" class="theme-button" type="button" aria-label="Toggle light and dark theme">☼</button>
 </header>
 <section class="http-hero">
   <div class="http-hero-inner">
@@ -236,6 +237,14 @@ class Program
   <footer class="http-footer">HTTP Fundamentals · Beginner learning module</footer>
 </main>
 <script>
+  // Share the dashboard's theme preference. Dark is the default across the site.
+  const themeButton = document.getElementById("theme");
+  if (localStorage.getItem("encyclopedia-theme") === "light") document.body.classList.add("light");
+  themeButton.addEventListener("click", () => {
+    document.body.classList.toggle("light");
+    localStorage.setItem("encyclopedia-theme", document.body.classList.contains("light") ? "light" : "dark");
+  });
+
   const lessonIds = [...document.querySelectorAll("[data-lesson]")].map(el => el.id);
   const completed = new Set();
   const progressBar = document.getElementById("progressBar");
