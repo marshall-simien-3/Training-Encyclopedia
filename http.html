@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Six interactive beginner lessons on HTTP, HTTPS, APIs, and C# HttpClient.">
+<title>HTTP Fundamentals — Interactive Learning Module</title>
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="http.css">
+</head>
+<body class="http-page">
+<header class="site-header http-site-header">
+  <a class="brand" href="../../index.html">◈ My Training Encyclopedia</a>
+  <span class="page-label">HTTP Fundamentals · Beginner</span>
+</header>
+<section class="http-hero">
+  <div class="http-hero-inner">
+    <div class="eyebrow">Interactive training module</div>
+    <h1>HTTP Fundamentals</h1>
+    <p>Learn how browsers and applications communicate with web servers, how APIs exchange data, and how this knowledge applies to production dashboards and .NET applications.</p>
+    <div class="http-meta"><span class="pill">6 lessons</span><span class="pill">Beginner</span><span class="pill">Quiz + checklist</span></div>
+  </div>
+</section>
+<main class="http-main">
+  <div class="progress-card">
+    <div class="progress-head"><span>Lesson progress</span><span id="progressText">0% complete (0 of 6 lessons)</span></div>
+    <div class="progress-track" id="progressTrack" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progressBar"></div></div>
+  </div>
+  <div class="http-layout">
+    <nav class="http-nav" aria-label="Lesson navigation">
+      <strong>On this page</strong>
+      <div class="nav-links">
+        <a href="#lesson1">1. HTTP basics</a>
+        <a href="#lesson2">2. Request & response</a>
+        <a href="#lesson3">3. HTTPS & headers</a>
+        <a href="#lesson4">4. Methods & status codes</a>
+        <a href="#lesson5">5. C# HttpClient</a>
+        <a href="#lesson6">6. HTTP vs TCP/IP</a>
+        <a href="#quiz">Knowledge check</a>
+        <a href="#recap">Recap checklist</a>
+      </div>
+    </nav>
+    <div class="http-content">
+      <section id="lesson1" data-lesson>
+        <h2>Lesson 1 — What is HTTP?</h2>
+        <p><strong>HTTP</strong> stands for Hypertext Transfer Protocol. It defines how a client asks a server for a resource or action and how the server responds. A browser is one kind of client; a C# application, mobile app, or production dashboard can also be an HTTP client.</p>
+        <div class="analogy-grid">
+          <div class="tile"><b>Client</b>The application making a request—for example, a dashboard asking for a coil's production details.</div>
+          <div class="tile"><b>Server</b>The application receiving the request, doing work, and returning a response.</div>
+          <div class="tile"><b>Request</b>Contains a method, target URL, headers, and sometimes a body.</div>
+          <div class="tile"><b>Response</b>Contains a status code, headers, and often a body with HTML, JSON, or other data.</div>
+        </div>
+        <div class="callout"><strong>Plant-system example:</strong> A browser dashboard requests coil KPI data from an API. The API validates the request, queries a database or service, and returns a JSON response. HTTP is the communication protocol—not the database and not the business logic.</div>
+        <h3>Why it matters</h3>
+        <p>Understanding HTTP helps you troubleshoot browser errors, design REST APIs, connect .NET applications to services, and separate front-end problems from API, network, or database problems.</p>
+        <button class="complete-btn" data-complete="lesson1" type="button">Mark lesson complete</button>
+      </section>
+
+      <section id="lesson2" data-lesson>
+        <h2>Lesson 2 — The request-and-response cycle</h2>
+        <p>A typical HTTP interaction follows a predictable sequence. The details may vary, but this mental model is useful when diagnosing application behavior.</p>
+        <div class="steps">
+          <div class="step"><span class="num">1</span><div><b>The client builds a request</b><br>It chooses a URL and method, then adds headers and—when needed—a request body.</div></div>
+          <div class="step"><span class="num">2</span><div><b>The request travels to the server</b><br>DNS, routing, firewalls, TLS, and the hosting environment can affect whether the server is reached.</div></div>
+          <div class="step"><span class="num">3</span><div><b>The server processes it</b><br>The application routes the request, checks permissions, performs work, and may query other systems.</div></div>
+          <div class="step"><span class="num">4</span><div><b>The server returns a response</b><br>The status code indicates the result; headers describe the response; the body may contain JSON or HTML.</div></div>
+        </div>
+        <h3>Example request</h3>
+        <pre class="code">GET /api/coils/12345 HTTP/1.1
+Host: production.example.com
+Accept: application/json</pre>
+        <h3>Example response</h3>
+        <pre class="code">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "coilId": "12345",
+  "tons": 24.7,
+  "status": "Complete"
+}</pre>
+        <p>The sample host and data are illustrative. Real endpoints, authentication, and response fields depend on the system you are using.</p>
+        <button class="complete-btn" data-complete="lesson2" type="button">Mark lesson complete</button>
+      </section>
+
+      <section id="lesson3" data-lesson>
+        <h2>Lesson 3 — HTTPS, headers, and JSON</h2>
+        <p><strong>HTTPS</strong> is HTTP carried through a TLS-protected connection. TLS helps encrypt traffic in transit and authenticate the server. It does not automatically make an application secure: authorization, input validation, certificates, and sound configuration still matter.</p>
+        <h3>Common headers</h3>
+        <table><thead><tr><th>Header</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+          <tr><td><code>Content-Type</code></td><td>Describes the format of the message body.</td><td><code>application/json</code></td></tr>
+          <tr><td><code>Accept</code></td><td>Tells the server which response formats the client can accept.</td><td><code>application/json</code></td></tr>
+          <tr><td><code>Authorization</code></td><td>Can carry credentials or a token for authentication.</td><td><code>Bearer …</code></td></tr>
+          <tr><td><code>Cache-Control</code></td><td>Provides caching instructions.</td><td><code>no-cache</code></td></tr>
+        </tbody></table>
+        <h3>What is JSON?</h3>
+        <p>JSON (JavaScript Object Notation) is a text format commonly used to exchange structured data. It supports objects, arrays, strings, numbers, booleans, and null values.</p>
+        <pre class="code">{
+  "coilId": "12345",
+  "temperatureF": 1640.5,
+  "isComplete": true,
+  "alarms": []
+}</pre>
+        <div class="callout"><strong>Security note:</strong> Do not put passwords, API keys, or other secrets in public JavaScript, URLs, or source-controlled files. Use your organization's approved authentication and secret-management approach.</div>
+        <button class="complete-btn" data-complete="lesson3" type="button">Mark lesson complete</button>
+      </section>
+
+      <section id="lesson4" data-lesson>
+        <h2>Lesson 4 — HTTP methods and status codes</h2>
+        <p>The method describes the action the client wants to perform. The status code summarizes the server's result. Neither alone tells the whole story, so check the response body and server logs when troubleshooting.</p>
+        <div class="method-grid">
+          <div class="method"><code>GET</code><p>Retrieve a resource. Typically should not change server state.</p></div>
+          <div class="method"><code>POST</code><p>Submit data or request an operation, often creating a resource.</p></div>
+          <div class="method"><code>PUT</code><p>Replace a resource representation at a known target.</p></div>
+          <div class="method"><code>PATCH</code><p>Apply a partial update to a resource.</p></div>
+          <div class="method"><code>DELETE</code><p>Request removal of a resource.</p></div>
+          <div class="method"><code>HEAD</code><p>Request headers similar to GET, without the response body.</p></div>
+        </div>
+        <h3>Status-code families</h3>
+        <table><thead><tr><th>Range</th><th>Meaning</th><th>Common examples</th></tr></thead><tbody>
+          <tr><td>2xx</td><td>Success</td><td><code>200 OK</code>, <code>201 Created</code>, <code>204 No Content</code></td></tr>
+          <tr><td>3xx</td><td>Redirection or cache-related response</td><td><code>301 Moved Permanently</code>, <code>304 Not Modified</code></td></tr>
+          <tr><td>4xx</td><td>Client/request problem</td><td><code>400 Bad Request</code>, <code>401 Unauthorized</code>, <code>403 Forbidden</code>, <code>404 Not Found</code></td></tr>
+          <tr><td>5xx</td><td>Server-side failure</td><td><code>500 Internal Server Error</code>, <code>502 Bad Gateway</code>, <code>503 Service Unavailable</code></td></tr>
+        </tbody></table>
+        <div class="callout"><strong>Troubleshooting habit:</strong> Confirm the URL and method, inspect the status code and response body, then check authentication, network path, application logs, and downstream dependencies.</div>
+        <button class="complete-btn" data-complete="lesson4" type="button">Mark lesson complete</button>
+      </section>
+
+      <section id="lesson5" data-lesson>
+        <h2>Lesson 5 — Calling an API from C# with HttpClient</h2>
+        <p><code>HttpClient</code> is the standard .NET class for sending HTTP requests. In a real ASP.NET Core application, prefer a managed client through <code>IHttpClientFactory</code> or another appropriate lifetime strategy rather than creating a new client for every request.</p>
+        <h3>Illustrative console example</h3>
+        <pre class="code">using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+class Program
+{
+    static async Task Main()
+    {
+        using var client = new HttpClient();
+        var url = "https://jsonplaceholder.typicode.com/posts/1";
+
+        using HttpResponseMessage response =
+            await client.GetAsync(url);
+
+        response.EnsureSuccessStatusCode();
+
+        string data = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(data);
+    }
+}</pre>
+        <h3>Understand the key lines</h3>
+        <ul>
+          <li><code>HttpClient</code> sends HTTP requests.</li>
+          <li><code>GetAsync(url)</code> sends a GET request asynchronously.</li>
+          <li><code>await</code> asynchronously waits for the operation to finish.</li>
+          <li><code>EnsureSuccessStatusCode()</code> throws if the response is not a successful status.</li>
+          <li><code>ReadAsStringAsync()</code> reads the response body as text; here, the body is JSON.</li>
+        </ul>
+        <div class="callout"><strong>Production application connection:</strong> A dashboard can call an API for coil or production data. The API can query Oracle or SQL Server and return JSON. HTTP carries the request and response; it does not replace the API or database. Always consider timeouts, cancellation, error handling, access controls, and safe database access.</div>
+        <button class="complete-btn" data-complete="lesson5" type="button">Mark lesson complete</button>
+      </section>
+
+      <section id="lesson6" data-lesson>
+        <h2>Lesson 6 — HTTP vs. TCP/IP</h2>
+        <p>HTTP is one layer of a larger communication process. Different protocols have different responsibilities.</p>
+        <div class="analogy-grid">
+          <div class="tile"><b>IP — addressing and routing</b>Moves packets toward their destination across networks.</div>
+          <div class="tile"><b>TCP — reliable transport</b>Provides an ordered byte stream with retransmission and flow control.</div>
+          <div class="tile"><b>HTTP — application conversation</b>Defines request/response semantics, methods, headers, and status codes.</div>
+          <div class="tile"><b>TLS — connection security</b>Helps encrypt traffic and authenticate the server for HTTPS.</div>
+        </div>
+        <table><thead><tr><th>Technology</th><th>Main responsibility</th></tr></thead><tbody>
+          <tr><td>IP</td><td>Addressing and routing packets</td></tr>
+          <tr><td>TCP</td><td>Reliable, ordered byte-stream delivery</td></tr>
+          <tr><td>HTTP</td><td>Rules for web requests and responses</td></tr>
+          <tr><td>TLS</td><td>Encryption and authentication for a secure connection</td></tr>
+        </tbody></table>
+        <p>HTTP/1.1 and HTTP/2 commonly run over TCP, with TLS used for HTTPS. HTTP/3 uses QUIC, which runs over UDP. When a web app fails, distinguishing application errors from transport or network errors helps narrow the investigation.</p>
+        <button class="complete-btn" data-complete="lesson6" type="button">Mark lesson complete</button>
+      </section>
+
+      <section id="quiz">
+        <h2>Knowledge check</h2>
+        <p>Choose an answer for each question, then select <strong>Check answers</strong> to see your score and explanations.</p>
+        <form id="quizForm">
+          <div class="quiz-question" data-answer="0" data-explain="A client sends a request; the server processes it and returns a response.">
+            <p>1. When you open a webpage, what is the browser typically doing?</p>
+            <label class="option"><input type="radio" name="q1" value="0"> Sending an HTTP request to a server</label>
+            <label class="option"><input type="radio" name="q1" value="1"> Directly reading the server's database files</label>
+            <label class="option"><input type="radio" name="q1" value="2"> Creating a new IP address</label><div class="feedback"></div>
+          </div>
+          <div class="quiz-question" data-answer="1" data-explain="GET is commonly used to retrieve a resource.">
+            <p>2. Which HTTP method is commonly used to retrieve data?</p>
+            <label class="option"><input type="radio" name="q2" value="0"> DELETE</label><label class="option"><input type="radio" name="q2" value="1"> GET</label><label class="option"><input type="radio" name="q2" value="2"> POST</label><div class="feedback"></div>
+          </div>
+          <div class="quiz-question" data-answer="2" data-explain="404 is the Not Found status code.">
+            <p>3. What does HTTP 404 mean?</p>
+            <label class="option"><input type="radio" name="q3" value="0"> The request succeeded</label><label class="option"><input type="radio" name="q3" value="1"> The server requires encryption</label><label class="option"><input type="radio" name="q3" value="2"> The requested resource was not found</label><div class="feedback"></div>
+          </div>
+          <div class="quiz-question" data-answer="0" data-explain="HTTPS uses TLS to help protect communication between the client and server.">
+            <p>4. What is the main difference between HTTP and HTTPS?</p>
+            <label class="option"><input type="radio" name="q4" value="0"> HTTPS adds TLS security to the connection</label><label class="option"><input type="radio" name="q4" value="1"> HTTP can only send text</label><label class="option"><input type="radio" name="q4" value="2"> HTTPS replaces the need for a server</label><div class="feedback"></div>
+          </div>
+          <div class="quiz-question" data-answer="1" data-explain="HttpClient is the .NET class commonly used to send HTTP requests.">
+            <p>5. Which .NET class is commonly used to send HTTP requests?</p>
+            <label class="option"><input type="radio" name="q5" value="0"> SqlConnection</label><label class="option"><input type="radio" name="q5" value="1"> HttpClient</label><label class="option"><input type="radio" name="q5" value="2"> FileInfo</label><div class="feedback"></div>
+          </div>
+          <div class="quiz-question" data-answer="2" data-explain="HTTP describes the request/response conversation; IP helps route packets.">
+            <p>6. Which statement best describes HTTP compared with IP?</p>
+            <label class="option"><input type="radio" name="q6" value="0"> HTTP routes packets to network addresses</label><label class="option"><input type="radio" name="q6" value="1"> IP defines the meaning of GET and POST</label><label class="option"><input type="radio" name="q6" value="2"> HTTP defines web requests and responses; IP helps route packets</label><div class="feedback"></div>
+          </div>
+          <div class="quiz-actions"><button type="submit">Check answers</button><button type="button" class="secondary" id="resetQuiz">Try again</button><span id="score" aria-live="polite"></span></div>
+        </form>
+      </section>
+
+      <section id="recap">
+        <h2>Recap checklist</h2>
+        <p>Use this checklist to confirm that you can explain the basics in your own words.</p>
+        <div class="checklist">
+          <label><input type="checkbox"> I can explain what HTTP is and why clients use it.</label>
+          <label><input type="checkbox"> I can describe the request-and-response cycle.</label>
+          <label><input type="checkbox"> I understand why HTTPS helps protect data in transit.</label>
+          <label><input type="checkbox"> I can recognize GET, POST, PUT, PATCH, and DELETE.</label>
+          <label><input type="checkbox"> I recognize common status codes such as 200, 404, and 500.</label>
+          <label><input type="checkbox"> I understand how C# can use HttpClient to call an API.</label>
+          <label><input type="checkbox"> I can explain the basic difference between HTTP and TCP/IP.</label>
+        </div>
+        <div class="callout"><strong>Suggested next module:</strong> REST APIs and JSON—how endpoints, request bodies, response data, and C# models work together.</div>
+        <button id="printBtn" type="button">Print / Save as PDF</button>
+        <p><a href="../../index.html">← Back to Training Encyclopedia dashboard</a></p>
+      </section>
+    </div>
+  </div>
+  <footer class="http-footer">HTTP Fundamentals · Beginner learning module</footer>
+</main>
+<script>
+  const lessonIds = [...document.querySelectorAll("[data-lesson]")].map(el => el.id);
+  const completed = new Set();
+  const progressBar = document.getElementById("progressBar");
+  const progressText = document.getElementById("progressText");
+  const progressTrack = document.getElementById("progressTrack");
+
+  function updateProgress() {
+    const pct = Math.round(completed.size / lessonIds.length * 100);
+    progressBar.style.width = pct + "%";
+    progressText.textContent = `${pct}% complete (${completed.size} of ${lessonIds.length} lessons)`;
+    progressTrack.setAttribute("aria-valuenow", pct);
+    document.querySelectorAll(".complete-btn").forEach(btn => {
+      const done = completed.has(btn.dataset.complete);
+      btn.textContent = done ? "Lesson completed ✓" : "Mark lesson complete";
+      btn.classList.toggle("done", done);
+    });
+  }
+
+  document.querySelectorAll(".complete-btn").forEach(btn => btn.addEventListener("click", () => {
+    if (completed.has(btn.dataset.complete)) completed.delete(btn.dataset.complete);
+    else completed.add(btn.dataset.complete);
+    updateProgress();
+  }));
+
+  document.querySelectorAll(".http-nav a").forEach(link => link.addEventListener("click", () => {
+    document.querySelectorAll(".http-nav a").forEach(a => a.classList.remove("active"));
+    link.classList.add("active");
+  }));
+
+  document.getElementById("quizForm").addEventListener("submit", event => {
+    event.preventDefault();
+    let score = 0, answered = 0;
+    document.querySelectorAll(".quiz-question").forEach(question => {
+      const selected = question.querySelector("input:checked");
+      const feedback = question.querySelector(".feedback");
+      feedback.className = "feedback";
+      if (!selected) {
+        feedback.textContent = "Choose an answer to complete this question.";
+        feedback.classList.add("bad");
+        return;
+      }
+      answered++;
+      const correct = Number(selected.value) === Number(question.dataset.answer);
+      if (correct) score++;
+      feedback.textContent = (correct ? "Correct. " : "Not quite. ") + question.dataset.explain;
+      feedback.classList.add(correct ? "good" : "bad");
+    });
+    document.getElementById("score").textContent = answered === 6 ? `Score: ${score}/6` : `Answered ${answered}/6 · Current score: ${score}/${answered}`;
+  });
+
+  document.getElementById("resetQuiz").addEventListener("click", () => {
+    document.getElementById("quizForm").reset();
+    document.querySelectorAll(".feedback").forEach(el => { el.className = "feedback"; el.textContent = ""; });
+    document.getElementById("score").textContent = "";
+  });
+  document.getElementById("printBtn").addEventListener("click", () => window.print());
+</script>
+</body>
+</html>
