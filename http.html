@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HTTP Fundamentals — Interactive Learning Module</title>
+<style>
+  :root {
+    --bg: #f4f7fb; --panel: #ffffff; --text: #172033; --muted: #5d687b;
+    --line: #dce3ed; --accent: #2859c5; --accent-soft: #eaf0ff;
+    --green: #18794e; --green-soft: #e7f6ee; --red: #b42318; --red-soft: #fff0ee;
+    --code: #111827; --code-text: #e5edf9; --shadow: 0 8px 28px rgba(22, 34, 55, .07);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); }
+  a { color: var(--accent); }
+  .hero { background: linear-gradient(135deg, #13264d, #2859c5); color: white; padding: 46px 20px 38px; }
+  .hero-inner, main { max-width: 1040px; margin: auto; }
+  .eyebrow { text-transform: uppercase; letter-spacing: .14em; font-size: .76rem; font-weight: 800; opacity: .8; }
+  h1 { font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.12; margin: 10px 0 14px; }
+  .hero p { max-width: 720px; color: #e0e9ff; font-size: 1.08rem; margin: 0; }
+  .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+  .pill { border: 1px solid #ffffff55; border-radius: 999px; padding: 5px 11px; font-size: .85rem; }
+  main { padding: 24px 18px 64px; }
+  .progress-card { background: var(--panel); border: 1px solid var(--line); box-shadow: var(--shadow); border-radius: 16px; padding: 17px 19px; margin: -2px 0 24px; }
+  .progress-head { display:flex; justify-content:space-between; gap:12px; font-weight:700; font-size:.94rem; }
+  .progress-track { height: 9px; background:#e8edf5; border-radius:99px; overflow:hidden; margin-top:10px; }
+  #progressBar { width:0%; height:100%; background:var(--accent); transition:width .25s; }
+  .layout { display:grid; grid-template-columns: 230px minmax(0,1fr); gap:22px; align-items:start; }
+  nav { background:var(--panel); border:1px solid var(--line); border-radius:15px; padding:14px; position:sticky; top:14px; }
+  nav strong { display:block; padding:5px 9px 10px; }
+  nav a { display:block; text-decoration:none; padding:8px 9px; border-radius:9px; color:var(--muted); font-size:.92rem; }
+  nav a:hover, nav a.active { background:var(--accent-soft); color:var(--accent); font-weight:700; }
+  .content { min-width:0; }
+  section { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:clamp(20px, 4vw, 30px); margin-bottom:20px; box-shadow:var(--shadow); scroll-margin-top:20px; }
+  h2 { font-size:1.55rem; margin:0 0 12px; line-height:1.25; }
+  h3 { font-size:1.08rem; margin:22px 0 8px; }
+  p { margin:9px 0 14px; }
+  .muted { color:var(--muted); }
+  .callout { border-left:4px solid var(--accent); background:var(--accent-soft); padding:13px 15px; border-radius:0 10px 10px 0; margin:16px 0; }
+  .analogy-grid, .steps, .method-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:18px 0; }
+  .tile { border:1px solid var(--line); border-radius:12px; padding:15px; background:#fcfdff; }
+  .tile b { display:block; margin-bottom:4px; }
+  .step { display:flex; gap:12px; align-items:flex-start; padding:13px 0; border-bottom:1px solid var(--line); }
+  .step:last-child { border-bottom:0; }
+  .num { flex:0 0 32px; height:32px; display:grid; place-items:center; border-radius:10px; background:var(--accent-soft); color:var(--accent); font-weight:800; }
+  .code { background:var(--code); color:var(--code-text); padding:16px; border-radius:12px; overflow:auto; font: .91rem/1.65 ui-monospace, SFMono-Regular, Consolas, monospace; white-space:pre; }
+  .method { border:1px solid var(--line); border-radius:12px; padding:15px; }
+  .method code { font-size:1.05rem; font-weight:800; color:var(--accent); }
+  .method p { margin-bottom:0; font-size:.94rem; }
+  table { width:100%; border-collapse:collapse; margin:14px 0; font-size:.94rem; }
+  th,td { text-align:left; padding:11px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { background:#f7f9fc; }
+  td code { background:#eef2f8; padding:2px 5px; border-radius:5px; }
+  .quiz-question { border-top:1px solid var(--line); padding:18px 0; }
+  .quiz-question:first-of-type { border-top:0; }
+  .quiz-question p { font-weight:750; margin:0 0 10px; }
+  .option { display:flex; gap:9px; align-items:flex-start; padding:8px 10px; border-radius:8px; cursor:pointer; }
+  .option:hover { background:#f6f8fc; }
+  .feedback { display:none; margin-top:9px; padding:10px 12px; border-radius:9px; font-size:.93rem; }
+  .feedback.good { display:block; color:var(--green); background:var(--green-soft); }
+  .feedback.bad { display:block; color:var(--red); background:var(--red-soft); }
+  button { cursor:pointer; border:0; border-radius:9px; padding:10px 15px; background:var(--accent); color:white; font-weight:750; font:inherit; }
+  button.secondary { color:var(--accent); background:var(--accent-soft); }
+  .quiz-actions { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:14px; }
+  #score { font-weight:800; }
+  .checklist label { display:flex; gap:10px; padding:9px 0; cursor:pointer; }
+  .checklist input { width:18px; height:18px; margin-top:4px; accent-color:var(--accent); }
+  .done { color:var(--green); font-weight:700; }
+  footer { text-align:center; color:var(--muted); padding:15px 0 30px; font-size:.9rem; }
+  @media (max-width:780px) {
+    .layout { grid-template-columns:1fr; }
+    nav { position:static; }
+    nav .nav-links { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:2px; }
+    .analogy-grid,.steps,.method-grid { grid-template-columns:1fr; }
+  }
+  @media print {
+    body { background:white; } .hero { background:#13264d !important; print-color-adjust:exact; }
+    nav, .progress-card, button, footer { display:none !important; }
+    .layout { display:block; } section { box-shadow:none; break-inside:avoid; }
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-inner">
+    <p style="margin:0 0 14px"><a href="index.html" style="color:#e0e9ff;text-decoration:none;font-weight:700">← Back to My Training Encyclopedia</a></p>
+    <div class="eyebrow">Beginner learning module</div>
+    <h1>HTTP Fundamentals</h1>
+    <p>Learn how browsers, C# applications, APIs, and servers communicate—using everyday analogies, practical examples, and a knowledge check.</p>
+    <div class="meta"><span class="pill">6 lessons</span><span class="pill">C# example</span><span class="pill">Interactive quiz</span></div>
+  </div>
+</header>
+
+<main>
+  <div class="progress-card">
+    <div class="progress-head"><span>Your learning progress</span><span id="progressText">0% complete</span></div>
+    <div class="progress-track" role="progressbar" aria-label="Learning progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack"><div id="progressBar"></div></div>
+    <p class="muted" style="margin:8px 0 0;font-size:.88rem">Mark lessons complete as you go. Your progress is kept in this page while it remains open.</p>
+  </div>
+
+  <div class="layout">
+    <nav aria-label="Module contents">
+      <strong>Module contents</strong>
+      <div class="nav-links">
+        <a href="#lesson1">1. What is HTTP?</a>
+        <a href="#lesson2">2. HTTP vs HTTPS</a>
+        <a href="#lesson3">3. Requests</a>
+        <a href="#lesson4">4. Methods & status codes</a>
+        <a href="#lesson5">5. HTTP with C#</a>
+        <a href="#lesson6">6. HTTP vs TCP/IP</a>
+        <a href="#quiz">Knowledge check</a>
+        <a href="#recap">Recap checklist</a>
+      </div>
+    </nav>
+
+    <div class="content">
+      <section id="lesson1" data-lesson>
+        <h2>Lesson 1 — What is HTTP?</h2>
+        <p><strong>HTTP stands for Hypertext Transfer Protocol.</strong> It is a set of rules that lets a client—such as a browser or C# application—ask a server for something and receive a response.</p>
+        <div class="callout"><strong>Core idea:</strong> request → server processes it → response.</div>
+        <h3>Analogy: ordering at a restaurant</h3>
+        <div class="analogy-grid">
+          <div class="tile"><b>You = client</b>The person or application asking for something.</div>
+          <div class="tile"><b>Your order = HTTP request</b>Specifies what you want the server to do or return.</div>
+          <div class="tile"><b>The kitchen = server</b>Processes the request, perhaps by running code or querying a database.</div>
+          <div class="tile"><b>Your meal = HTTP response</b>The result, such as a webpage, data, confirmation, or error.</div>
+        </div>
+        <h3>The request-and-response cycle</h3>
+        <div class="step"><span class="num">1</span><div><b>You request something.</b><br>A browser asks for a webpage, or an application asks for production data.</div></div>
+        <div class="step"><span class="num">2</span><div><b>The request reaches the server.</b><br>HTTP defines the format and meaning of the request.</div></div>
+        <div class="step"><span class="num">3</span><div><b>The server does its work.</b><br>It might return a file, execute application logic, or retrieve data from a database.</div></div>
+        <div class="step"><span class="num">4</span><div><b>The server sends a response.</b><br>The response includes a status code and may include a body containing HTML, JSON, or other data.</div></div>
+        <p class="muted">HTTP does not itself run your C# code or query your database. It defines how the client and server communicate.</p>
+        <button class="secondary complete-btn" data-complete="lesson1">Mark lesson complete</button>
+      </section>
+
+      <section id="lesson2" data-lesson>
+        <h2>Lesson 2 — HTTP vs HTTPS</h2>
+        <p>A <strong>protocol</strong> is an agreed set of communication rules. HTTP is the protocol used for web requests and responses. HTTPS is HTTP protected by TLS encryption and authentication.</p>
+        <table>
+          <thead><tr><th>HTTP</th><th>HTTPS</th></tr></thead>
+          <tbody>
+            <tr><td>HTTP itself does not encrypt the connection.</td><td>TLS helps protect data in transit from being read or changed by others.</td></tr>
+            <tr><td>Not suitable by itself for sensitive traffic over untrusted networks.</td><td>The normal choice for modern websites and APIs.</td></tr>
+            <tr><td>Often shown with <code>http://</code></td><td>Often shown with <code>https://</code></td></tr>
+          </tbody>
+        </table>
+        <div class="callout"><strong>Remember:</strong> HTTPS helps protect the connection, but it does not prove that a website's owner is honest or that its content is safe.</div>
+        <p><strong>Analogy:</strong> HTTP is like sending a postcard that someone handling it might read. HTTPS is more like putting the message inside a locked, tamper-protected case that only the intended endpoint can unlock.</p>
+        <button class="secondary complete-btn" data-complete="lesson2">Mark lesson complete</button>
+      </section>
+
+      <section id="lesson3" data-lesson>
+        <h2>Lesson 3 — What is inside an HTTP request?</h2>
+        <p>Suppose your browser visits <code>https://example.com/products</code>. A simplified HTTP request might look like this:</p>
+        <div class="code">GET /products HTTP/1.1
+Host: example.com
+Accept: application/json</div>
+        <p><strong>What each line means:</strong></p>
+        <ul>
+          <li><code>GET</code> is the method: the type of operation being requested.</li>
+          <li><code>/products</code> is the path: the resource being requested.</li>
+          <li><code>HTTP/1.1</code> identifies the HTTP version in this example.</li>
+          <li><code>Host</code> identifies the website host.</li>
+          <li><code>Accept</code> tells the server which response formats the client can handle.</li>
+        </ul>
+        <p>Requests can also contain a body. For example, a POST request might send a JSON object with form data. Headers provide additional information about the request or response.</p>
+        <div class="callout">This is a simplified example. Real browser requests often contain more headers, and HTTPS encrypts HTTP details while they travel over the network.</div>
+        <button class="secondary complete-btn" data-complete="lesson3">Mark lesson complete</button>
+      </section>
+
+      <section id="lesson4" data-lesson>
+        <h2>Lesson 4 — Methods and status codes</h2>
+        <h3>Common HTTP methods</h3>
+        <div class="method-grid">
+          <div class="method"><code>GET</code><p>Retrieve a resource. Example: fetch a list of coils.</p></div>
+          <div class="method"><code>POST</code><p>Submit data or initiate an operation. Example: submit a production report.</p></div>
+          <div class="method"><code>PUT</code><p>Create or replace a resource. Example: replace a full record.</p></div>
+          <div class="method"><code>PATCH</code><p>Update part of a resource. Example: change one field in a record.</p></div>
+          <div class="method"><code>DELETE</code><p>Request removal of a resource.</p></div>
+        </div>
+        <p class="muted">These methods communicate intent. The server's application code determines how it handles the request.</p>
+        <h3>Common response status codes</h3>
+        <table>
+          <thead><tr><th>Code</th><th>Meaning</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>200 OK</code></td><td>Request succeeded</td><td>Coil data returned successfully</td></tr>
+            <tr><td><code>201 Created</code></td><td>A resource was created</td><td>A new report record was added</td></tr>
+            <tr><td><code>400 Bad Request</code></td><td>The request is invalid</td><td>A required value is missing</td></tr>
+            <tr><td><code>401 Unauthorized</code></td><td>Authentication is missing or invalid</td><td>Login credentials or token are not accepted</td></tr>
+            <tr><td><code>403 Forbidden</code></td><td>Access is not permitted</td><td>The user lacks the required permission</td></tr>
+            <tr><td><code>404 Not Found</code></td><td>The resource was not found</td><td>The requested URL or record does not exist</td></tr>
+            <tr><td><code>500 Internal Server Error</code></td><td>The server encountered an unexpected problem</td><td>An unhandled error occurred in server code</td></tr>
+          </tbody>
+        </table>
+        <button class="secondary complete-btn" data-complete="lesson4">Mark lesson complete</button>
+      </section>
+
+      <section id="lesson5" data-lesson>
+        <h2>Lesson 5 — Using HTTP from C#</h2>
+        <p>A C# application can use <code>HttpClient</code> to send requests to a web API. This example retrieves a sample post from a public test API.</p>
+        <div class="code">using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+class Program
+{
+    static async Task Main()
+    {
+        using HttpClient client = new HttpClient();
+
+        string url =
+            "https://jsonplaceholder.typicode.com/posts/1";
+
+        HttpResponseMessage response =
+            await client.GetAsync(url);
+
+        response.EnsureSuccessStatusCode();
+
+        string data =
+            await response.Content.ReadAsStringAsync();
+
+        Console.WriteLine(data);
+    }
+}</div>
+        <h3>Understand the key lines</h3>
+        <ul>
+          <li><code>HttpClient</code> sends HTTP requests.</li>
+          <li><code>GetAsync(url)</code> sends a GET request asynchronously.</li>
+          <li><code>await</code> lets the method asynchronously wait for the operation to finish without blocking the thread in the usual synchronous way.</li>
+          <li><code>EnsureSuccessStatusCode()</code> throws an exception if the response status is not successful.</li>
+          <li><code>ReadAsStringAsync()</code> reads the response body as text. Here, the text is JSON.</li>
+        </ul>
+        <div class="callout"><strong>Try it:</strong> Run the example in a C# console project with internet access. The API returns JSON for a sample post. In a real application, also consider cancellation, timeouts, exception handling, and reusing <code>HttpClient</code> appropriately.</div>
+        <h3>How this relates to a plant application</h3>
+        <p>A web dashboard could send an HTTP request to an API for coil or production data. The API might query Oracle or SQL Server, then return JSON to the dashboard. HTTP carries the request and response; it does not replace the API or database.</p>
+        <button class="secondary complete-btn" data-complete="lesson5">Mark lesson complete</button>
+      </section>
+
+      <section id="lesson6" data-lesson>
+        <h2>Lesson 6 — HTTP vs TCP/IP</h2>
+        <p>HTTP is only one part of network communication. Different technologies have different responsibilities.</p>
+        <div class="analogy-grid">
+          <div class="tile"><b>IP — addressing and routing</b>Like the address and route used to get a package toward its destination.</div>
+          <div class="tile"><b>TCP — reliable delivery</b>Like a delivery service that aims to deliver data reliably and in order.</div>
+          <div class="tile"><b>HTTP — application conversation</b>Like the instructions describing what the sender is asking for and what the response means.</div>
+          <div class="tile"><b>TLS — connection security</b>Helps encrypt data and authenticate the server for HTTPS connections.</div>
+        </div>
+        <table>
+          <thead><tr><th>Technology</th><th>Main responsibility</th></tr></thead>
+          <tbody>
+            <tr><td>IP</td><td>Addressing and routing packets across networks</td></tr>
+            <tr><td>TCP</td><td>Reliable, ordered byte-stream delivery</td></tr>
+            <tr><td>HTTP</td><td>Rules for web requests and responses</td></tr>
+            <tr><td>TLS</td><td>Encryption and authentication for a secure connection</td></tr>
+          </tbody>
+        </table>
+        <p>HTTP/1.1 and HTTP/2 typically use TCP, with TLS for HTTPS. HTTP/3 uses QUIC, which runs over UDP.</p>
+        <button class="secondary complete-btn" data-complete="lesson6">Mark lesson complete</button>
+      </section>
+
+      <section id="quiz">
+        <h2>Knowledge check</h2>
+        <p>Choose an answer for each question, then select <strong>Check answers</strong> to see your score and explanations.</p>
+        <form id="quizForm">
+          <div class="quiz-question" data-answer="0" data-explain="A client sends a request. The server processes it and returns a response.">
+            <p>1. When you open a webpage, what is the browser typically doing?</p>
+            <label class="option"><input type="radio" name="q1" value="0"> Sending an HTTP request to a server</label>
+            <label class="option"><input type="radio" name="q1" value="1"> Directly reading the server's database files</label>
+            <label class="option"><input type="radio" name="q1" value="2"> Creating a new IP address</label>
+            <div class="feedback"></div>
+          </div>
+          <div class="quiz-question" data-answer="1" data-explain="GET is commonly used to retrieve a resource.">
+            <p>2. Which HTTP method is commonly used to retrieve data?</p>
+            <label class="option"><input type="radio" name="q2" value="0"> DELETE</label>
+            <label class="option"><input type="radio" name="q2" value="1"> GET</label>
+            <label class="option"><input type="radio" name="q2" value="2"> POST</label>
+            <div class="feedback"></div>
+          </div>
+          <div class="quiz-question" data-answer="2" data-explain="404 is the Not Found status code.">
+            <p>3. What does HTTP 404 mean?</p>
+            <label class="option"><input type="radio" name="q3" value="0"> The request succeeded</label>
+            <label class="option"><input type="radio" name="q3" value="1"> The server requires encryption</label>
+            <label class="option"><input type="radio" name="q3" value="2"> The requested resource was not found</label>
+            <div class="feedback"></div>
+          </div>
+          <div class="quiz-question" data-answer="0" data-explain="HTTPS uses TLS to help protect communication between the client and server.">
+            <p>4. What is the main difference between HTTP and HTTPS?</p>
+            <label class="option"><input type="radio" name="q4" value="0"> HTTPS adds TLS security to the connection</label>
+            <label class="option"><input type="radio" name="q4" value="1"> HTTP can only send text</label>
+            <label class="option"><input type="radio" name="q4" value="2"> HTTPS replaces the need for a server</label>
+            <div class="feedback"></div>
+          </div>
+          <div class="quiz-question" data-answer="1" data-explain="HttpClient is the .NET class commonly used to send HTTP requests.">
+            <p>5. Which .NET class is commonly used to send HTTP requests?</p>
+            <label class="option"><input type="radio" name="q5" value="0"> SqlConnection</label>
+            <label class="option"><input type="radio" name="q5" value="1"> HttpClient</label>
+            <label class="option"><input type="radio" name="q5" value="2"> FileInfo</label>
+            <div class="feedback"></div>
+          </div>
+          <div class="quiz-question" data-answer="2" data-explain="HTTP describes the request/response conversation; IP and transport protocols move the data across the network.">
+            <p>6. Which statement best describes HTTP compared with IP?</p>
+            <label class="option"><input type="radio" name="q6" value="0"> HTTP routes packets to network addresses</label>
+            <label class="option"><input type="radio" name="q6" value="1"> IP defines the meaning of GET and POST</label>
+            <label class="option"><input type="radio" name="q6" value="2"> HTTP defines web requests and responses; IP helps route packets</label>
+            <div class="feedback"></div>
+          </div>
+          <div class="quiz-actions">
+            <button type="submit">Check answers</button>
+            <button type="button" class="secondary" id="resetQuiz">Try again</button>
+            <span id="score" aria-live="polite"></span>
+          </div>
+        </form>
+      </section>
+
+      <section id="recap">
+        <h2>Recap checklist</h2>
+        <p>Use this checklist to confirm that you can explain the basics in your own words.</p>
+        <div class="checklist" id="recapList">
+          <label><input type="checkbox"> I can explain what HTTP is and why clients use it.</label>
+          <label><input type="checkbox"> I can describe the request-and-response cycle.</label>
+          <label><input type="checkbox"> I understand why HTTPS is safer for data in transit.</label>
+          <label><input type="checkbox"> I can recognize GET, POST, PUT, PATCH, and DELETE.</label>
+          <label><input type="checkbox"> I recognize common status codes such as 200, 404, and 500.</label>
+          <label><input type="checkbox"> I understand how C# can use HttpClient to call an API.</label>
+          <label><input type="checkbox"> I can explain the basic difference between HTTP and TCP/IP.</label>
+        </div>
+        <div class="callout"><strong>Suggested next module:</strong> REST APIs and JSON—how endpoints, request bodies, response data, and C# models work together.</div>
+        <button id="printBtn">Print / Save as PDF</button>
+      </section>
+    </div>
+  </div>
+  <footer>HTTP Fundamentals · Beginner learning module</footer>
+</main>
+
+<script>
+  const lessonIds = [...document.querySelectorAll('[data-lesson]')].map(el => el.id);
+  const completed = new Set();
+  const progressBar = document.getElementById('progressBar');
+  const progressText = document.getElementById('progressText');
+  const progressTrack = document.getElementById('progressTrack');
+
+  function updateProgress() {
+    const pct = Math.round(completed.size / lessonIds.length * 100);
+    progressBar.style.width = pct + '%';
+    progressText.textContent = pct + '% complete (' + completed.size + ' of ' + lessonIds.length + ' lessons)';
+    progressTrack.setAttribute('aria-valuenow', pct);
+    document.querySelectorAll('.complete-btn').forEach(btn => {
+      const isDone = completed.has(btn.dataset.complete);
+      btn.textContent = isDone ? 'Lesson completed ✓' : 'Mark lesson complete';
+      btn.classList.toggle('done', isDone);
+    });
+  }
+  document.querySelectorAll('.complete-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (completed.has(btn.dataset.complete)) completed.delete(btn.dataset.complete);
+      else completed.add(btn.dataset.complete);
+      updateProgress();
+    });
+  });
+
+  document.querySelectorAll('nav a').forEach(link => {
+    link.addEventListener('click', () => {
+      document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
+
+  document.getElementById('quizForm').addEventListener('submit', event => {
+    event.preventDefault();
+    let score = 0, answered = 0;
+    document.querySelectorAll('.quiz-question').forEach(question => {
+      const selected = question.querySelector('input:checked');
+      const feedback = question.querySelector('.feedback');
+      feedback.className = 'feedback';
+      if (!selected) {
+        feedback.textContent = 'Choose an answer to complete this question.';
+        feedback.classList.add('bad');
+        return;
+      }
+      answered++;
+      const correct = Number(selected.value) === Number(question.dataset.answer);
+      if (correct) score++;
+      feedback.textContent = (correct ? 'Correct. ' : 'Not quite. ') + question.dataset.explain;
+      feedback.classList.add(correct ? 'good' : 'bad');
+    });
+    document.getElementById('score').textContent = answered === 6 ? `Score: ${score}/6` : `Answered ${answered}/6 · Current score: ${score}/${answered}`;
+  });
+
+  document.getElementById('resetQuiz').addEventListener('click', () => {
+    document.getElementById('quizForm').reset();
+    document.querySelectorAll('.feedback').forEach(el => { el.className = 'feedback'; el.textContent = ''; });
+    document.getElementById('score').textContent = '';
+  });
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
+  updateProgress();
+</script>
+</body>
+</html>

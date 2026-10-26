@@ -1,0 +1,64 @@
+/* HTTP module-specific layout. Shared colors, typography, and theme come from ../style.css. */
+:root { --accent-soft: color-mix(in srgb, var(--accent) 13%, var(--panel)); --green:#18794e; --green-soft:#e7f6ee; --red:#b42318; --red-soft:#fff0ee; --code:#081625; --code-text:#e5edf9; --shadow:0 8px 28px rgba(0,0,0,.12); }
+html { scroll-behavior:smooth; }
+.http-page { margin:0; }
+.http-hero { background:linear-gradient(115deg,#163f78,#142845 60%,#102038); color:white; padding:38px 20px 34px; }
+.http-hero-inner { max-width:1180px; margin:auto; }
+.http-hero .eyebrow { text-transform:uppercase; letter-spacing:.14em; font-size:.76rem; font-weight:800; opacity:.8; }
+.http-hero h1 { font-size:clamp(2rem,5vw,3.25rem); line-height:1.12; margin:10px 0 14px; }
+.http-hero p { max-width:720px; color:#d0e2fa; font-size:1.05rem; margin:0; }
+.http-meta { display:flex; gap:10px; flex-wrap:wrap; margin-top:22px; }
+.http-meta .pill { border:1px solid #ffffff55; color:white; }
+.http-main { max-width:1400px; padding:24px 42px 64px; }
+.progress-card { background:var(--panel); border:1px solid var(--line); box-shadow:var(--shadow); border-radius:16px; padding:17px 19px; margin:0 0 24px; }
+.progress-head { display:flex; justify-content:space-between; gap:12px; font-weight:700; font-size:.94rem; }
+.progress-track { height:9px; background:var(--line); border-radius:99px; overflow:hidden; margin-top:10px; }
+#progressBar { width:0%; height:100%; background:var(--accent); transition:width .25s; }
+.http-layout { display:grid; grid-template-columns:230px minmax(0,1fr); gap:22px; align-items:start; }
+.http-nav { background:var(--panel); border:1px solid var(--line); border-radius:15px; padding:14px; position:sticky; top:84px; }
+.http-nav strong { display:block; padding:5px 9px 10px; }
+.http-nav a { display:block; text-decoration:none; padding:8px 9px; border-radius:9px; color:var(--muted); font-size:.92rem; }
+.http-nav a:hover,.http-nav a.active { background:var(--accent-soft); color:var(--accent); font-weight:700; }
+.http-content { min-width:0; }
+.http-content section { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:clamp(20px,4vw,30px); margin-bottom:20px; box-shadow:var(--shadow); scroll-margin-top:88px; }
+.http-content h2 { font-size:1.55rem; margin:0 0 12px; line-height:1.25; }
+.http-content h3 { font-size:1.08rem; margin:22px 0 8px; }
+.http-content p { margin:9px 0 14px; }
+.muted { color:var(--muted); }
+.callout { border-left:4px solid var(--accent); background:var(--accent-soft); padding:13px 15px; border-radius:0 10px 10px 0; margin:16px 0; }
+.analogy-grid,.steps,.method-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:18px 0; }
+.tile { border:1px solid var(--line); border-radius:12px; padding:15px; background:var(--card); }
+.tile b { display:block; margin-bottom:4px; }
+.step { display:flex; gap:12px; align-items:flex-start; padding:13px 0; border-bottom:1px solid var(--line); }
+.step:last-child { border-bottom:0; }
+.num { flex:0 0 32px; height:32px; display:grid; place-items:center; border-radius:10px; background:var(--accent-soft); color:var(--accent); font-weight:800; }
+.code { background:var(--code); color:var(--code-text); padding:16px; border-radius:12px; overflow:auto; font:.91rem/1.65 ui-monospace,SFMono-Regular,Consolas,monospace; white-space:pre; }
+.method { border:1px solid var(--line); border-radius:12px; padding:15px; }
+.method code { font-size:1.05rem; font-weight:800; color:var(--accent); }
+.method p { margin-bottom:0; font-size:.94rem; }
+.http-content table { width:100%; border-collapse:collapse; margin:14px 0; font-size:.94rem; }
+.http-content th,.http-content td { text-align:left; padding:11px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+.http-content th { background:var(--card); }
+.http-content td code { background:var(--accent-soft); padding:2px 5px; border-radius:5px; }
+.quiz-question { border-top:1px solid var(--line); padding:18px 0; }
+.quiz-question:first-of-type { border-top:0; }
+.quiz-question p { font-weight:750; margin:0 0 10px; }
+.option { display:flex; gap:9px; align-items:flex-start; padding:8px 10px; border-radius:8px; cursor:pointer; }
+.option:hover { background:var(--accent-soft); }
+.feedback { display:none; margin-top:9px; padding:10px 12px; border-radius:9px; font-size:.93rem; }
+.feedback.good { display:block; color:var(--green); background:var(--green-soft); }
+.feedback.bad { display:block; color:var(--red); background:var(--red-soft); }
+.http-content button { cursor:pointer; border:0; border-radius:9px; padding:10px 15px; background:var(--accent); color:white; font-weight:750; font:inherit; }
+.http-content button.secondary { color:var(--accent); background:var(--accent-soft); }
+.quiz-actions { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:14px; }
+#score { font-weight:800; }
+.checklist label { display:flex; gap:10px; padding:9px 0; cursor:pointer; }
+.checklist input { width:18px; height:18px; margin-top:4px; accent-color:var(--accent); }
+.done { color:var(--green); font-weight:700; }
+.http-footer { text-align:center; color:var(--muted); padding:15px 0 30px; font-size:.9rem; }
+.http-library-link { color:var(--accent); text-decoration:none; font-size:14px; }
+.http-site-header { justify-content:space-between; }
+.http-site-header .brand { margin-right:auto; }
+.http-site-header .page-label { color:var(--muted); font-size:13px; }
+@media(max-width:780px) { .http-layout{grid-template-columns:1fr}.http-nav{position:static}.http-nav .nav-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px}.analogy-grid,.steps,.method-grid{grid-template-columns:1fr}.http-main{padding:20px}.http-site-header{padding:12px;gap:8px;flex-wrap:wrap;height:auto}.http-site-header .page-label{display:none} }
+@media print { .http-page{background:white!important;color:#17263a!important}.http-hero{background:#13264d!important;print-color-adjust:exact}.http-nav,.progress-card,.http-content button,.http-footer,.http-site-header{display:none!important}.http-layout{display:block}.http-content section{box-shadow:none;break-inside:avoid} }
